@@ -1,0 +1,24 @@
+{
+  "name": "ascii_mirror",
+  "version": "0.0.1",
+  "description": "a p5js ascii mirror",
+  "main": "sketch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdamSpannbauer/ascii_mirror.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AdamSpannbauer/ascii_mirror/issues"
+  },
+  "homepage": "https://github.com/AdamSpannbauer/ascii_mirror#readme",
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
+  }
+}
