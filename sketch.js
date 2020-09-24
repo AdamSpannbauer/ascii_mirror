@@ -4,7 +4,7 @@ const canvas_h = 960;
 const video_scale = 11;
 
 let video_capture;
-const draw_ascii = ['@', '&', 'E', 'F', 'L', 'I', '*', '-', ',', '.', ' '];
+const draw_ascii = ['#', '@', 'M', 'N', 'D', 'X', '2', 'V', 'Y', 'J', '1', 'I', '*', '-', ',', '.', ' '];
 const draw_moji = ['⬛', '🌚', '💩', '🥦', '👽', '💨', '👀', ' '];
 let draw_chars = draw_ascii;
 
@@ -82,7 +82,7 @@ function position_things() {
   submit_btn.position(x, y);
 
   video_capture.show();
-  video_capture.size(w / video_scale, h / video_scale);
+  video_capture.size(int(w / video_scale), int(h / video_scale));
   video_capture.hide();
 }
 
