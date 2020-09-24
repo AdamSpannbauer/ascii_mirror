@@ -143,6 +143,7 @@ function setup() {
 
   video_capture = createCapture(VIDEO);
   video_capture.size(width / video_scale, height / video_scale);
+  video_capture.elt.setAttribute('playsinline', '');
   video_capture.hide();
 
   video_upload = createFileInput(handleFile);
