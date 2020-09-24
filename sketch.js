@@ -1,5 +1,5 @@
-const canvas_w = 1280;
-const canvas_h = 960;
+let canvas_w = 1280;
+let canvas_h = 960;
 
 const video_scale = 11;
 
@@ -21,7 +21,7 @@ let _g_max;
  */
 function update_chars() {
   let selected_chars;
-  if (checkbox.checked()) {
+  if (textbox_checkbox.checked()) {
     selected_chars = emoji_chars.value();
   } else {
     selected_chars = ascii_chars.value();
@@ -32,6 +32,22 @@ function update_chars() {
   }
 
   draw_chars = [...selected_chars];
+}
+
+function handleFile(file) {
+  if (file.type === 'video') {
+    video_capture = createVideo(file.data, load_video);
+  }
+}
+
+function load_video() {
+  video_capture.loop();
+  video_capture.volume(0);
+
+  canvas_w = video_capture.width;
+  canvas_h = video_capture.height;
+
+  position_things();
 }
 
 /**
@@ -67,6 +83,10 @@ function position_things() {
 
   x = cx - ascii_chars.width / 2;
   y += h + buffer;
+  video_upload.position(x, y);
+
+  x = cx - ascii_chars.width / 2;
+  y += video_upload.height + buffer;
   ascii_chars.position(x, y);
 
   x = cx - emoji_chars.width / 2;
@@ -75,11 +95,18 @@ function position_things() {
 
   x = cx - ascii_chars.width / 2;
   y += emoji_chars.height + buffer;
-  checkbox.position(x, y);
+  textbox_checkbox.position(x, y);
 
-  x = cx - submit_btn.width / 2;
-  y += checkbox.height + buffer;
+  x = cx - ascii_chars.width / 2;
+  y += textbox_checkbox.height + buffer;
+  color_checkbox.position(x, y);
+
+  x = cx - submit_btn.width;
+  y += color_checkbox.height + buffer;
   submit_btn.position(x, y);
+
+  x = cx + buffer;
+  reset_btn.position(x, y);
 
   video_capture.show();
   video_capture.size(int(w / video_scale), int(h / video_scale));
@@ -93,6 +120,10 @@ function position_things() {
  */
 function windowResized() {
   position_things();
+}
+
+function refresh_page() {
+  location.reload();
 }
 
 /**
@@ -112,7 +143,9 @@ function setup() {
 
   video_capture = createCapture(VIDEO);
   video_capture.size(width / video_scale, height / video_scale);
-  // video_capture.hide();
+  video_capture.hide();
+
+  video_upload = createFileInput(handleFile);
 
   ascii_chars = createInput();
   ascii_chars.value(draw_ascii.join(''));
@@ -120,10 +153,14 @@ function setup() {
   emoji_chars = createInput();
   emoji_chars.value(draw_moji.join(''));
 
-  checkbox = createCheckbox('Use 2nd text box?');
+  textbox_checkbox = createCheckbox('Use 2nd text box?');
+  color_checkbox = createCheckbox('Use color?');
 
   submit_btn = createButton('Apply');
   submit_btn.mousePressed(update_chars);
+
+  reset_btn = createButton('Reset');
+  reset_btn.mousePressed(refresh_page);
 
   position_things();
 }
@@ -156,8 +193,14 @@ function draw() {
       const g = video_capture.pixels[index + 1];
       const b = video_capture.pixels[index + 2];
 
-      stroke(0, 0, 0);
-      fill(0, 0, 0);
+      if (color_checkbox.checked()) {
+        stroke(r, g, b);
+        fill(r, g, b);
+      } else {
+        stroke(0, 0, 0);
+        fill(0, 0, 0);
+      }
+
       const gray = 0.2126 * r + 0.7152 * g + 0.0722 * b;
       const char_i = floor(map(gray, g_min, g_max + 1, 0, draw_chars.length));
 
